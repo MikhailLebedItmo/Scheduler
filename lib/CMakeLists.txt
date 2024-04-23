@@ -6,4 +6,5 @@ add_library(
         task.h
         future_result.h
         task_id.h
+        func_arguments.h
 )

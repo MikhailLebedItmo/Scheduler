@@ -4,13 +4,12 @@
 #include "../lib/any.h"
 #include "../lib/scheduler.h"
 #include <cmath>
+#include <any>
 
-
-struct S {
-
-};
 
 int main() {
+//    std::any some = 1.0;
+//    std::cout << std::any_cast<int>(some);
     {
 //        Any any;
 //        any = 5;
@@ -50,8 +49,10 @@ int main() {
     auto id6 = scheduler.add([](float a, float v){return v/(2*a);},a, scheduler.get_future_result<float>(id4));
 
     scheduler.execute_all();
+    scheduler.Debug();
+
 //
-    std::cout << "x1 = " << scheduler.get_result<int>(id5) << std::endl;
-    std::cout << "x2 = " << scheduler.get_result<int>(id6) << std::endl;
+    std::cout << "x1 = " << scheduler.get_result<float>(id5) << std::endl;
+    std::cout << "x2 = " << scheduler.get_result<float>(id6) << std::endl;
 
 }

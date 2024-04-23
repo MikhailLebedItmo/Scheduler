@@ -1,5 +1,6 @@
 #pragma once
 #include "any.h"
+#include "func_arguments.h"
 
 
 class BaseTask {
@@ -11,20 +12,23 @@ public:
     virtual ~BaseTask() = default;
 };
 
-template <typename Func, typename FirstArg, typename SecondArg>
+template <typename Func, typename ...Args>
 class Task: public BaseTask {
 public:
-    Task(Func func, FirstArg first_arg, SecondArg second_arg)
-      : first_arg(std::move(first_arg))
-      , second_arg(std::move(second_arg))
+    Task(Func func, Args... args)
+      : arguments(std::move(args)...)
       , result()
       , func(func) {}
+
+    Task(const Task& other) = delete;
+
+    Task& operator=(const Task& other) = delete;
 
     void execute() override {
         if (is_completed()) {
             return;
         }
-        result = func(std::move(first_arg), std::move(second_arg));
+        result = arguments.apply(func);
     }
 
     Any& get_result() override {
@@ -38,8 +42,7 @@ public:
 
     ~Task() override = default;
 private:
-    FirstArg first_arg;
-    SecondArg second_arg;
+    FuncArgs<Args...> arguments;
     Any result;
     [[no_unique_address]] Func func;
 };
