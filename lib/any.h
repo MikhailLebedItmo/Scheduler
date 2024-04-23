@@ -28,7 +28,7 @@ public: // structors
       , typename std::enable_if<!std::is_same<Any&, ValueType>::value >::type* = 0 // disable if value has type `basic_any&`
       , typename std::enable_if<!std::is_const<ValueType>::value >::type* = 0) // disable if value has type `const ValueType&&`
       : Any() {
-        create(*this, static_cast<ValueType&&>(value)); // todo: maby change to forward
+        create(*this, static_cast<ValueType&&>(value));
     }
 
     ~Any() {
@@ -136,8 +136,4 @@ template<typename ValueType>
 ValueType any_cast(const Any& any) {
     return any_cast<ValueType>(const_cast<Any&>(any));
 }
-
-
-// todo: make rvalue
-
 

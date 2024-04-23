@@ -16,12 +16,6 @@ public:
     Scheduler(const Scheduler& other) = delete;
 
     Scheduler& operator=(const Scheduler& other) = delete;
-
-    void Debug() { // todo: delete
-         for (int i = 0; i < tasks.size(); ++i) {
-             std::cout << "id" << i + 1 << " = " << get_result<float>(TaskId(i)) << '\n';
-         }
-    }
 public:
     template<typename Func, typename FirstArg, typename SecondArg>
     TaskId add(Func func, FirstArg first_arg, SecondArg second_arg) {

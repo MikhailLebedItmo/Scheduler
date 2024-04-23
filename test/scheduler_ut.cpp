@@ -8,7 +8,7 @@
 #include "../lib/scheduler.h"
 
 
-TEST(SimpleChain, 1) {
+TEST(Test, First) {
     double a = 1.5;
     double b = 2.5;
 
@@ -21,7 +21,7 @@ TEST(SimpleChain, 1) {
     ASSERT_EQ(scheduler.get_result<double>(id1), 4.0);
 }
 
-TEST(SimpleChain, 2) {
+TEST(Test, Second) {
     double a = 1.5;
     double b = 2.5;
     double c = 2.0;
@@ -38,7 +38,7 @@ TEST(SimpleChain, 2) {
     ASSERT_EQ(scheduler.get_result<double>(id2), 2.0);
 }
 
-TEST(SquareFootage, 1) {
+TEST(Test, Third) {
     float a = 1;
     float b = -2;
     float c = 0;
