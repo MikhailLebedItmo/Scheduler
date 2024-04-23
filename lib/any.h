@@ -78,7 +78,7 @@ public: // queries
     }
 private:
     template<typename ValueType>
-    friend ValueType * any_cast(Any*) noexcept;
+    friend ValueType any_cast(Any&);
 private:
     enum operation {
         Destroy,
@@ -120,13 +120,16 @@ private:
 };
 
 template<typename ValueType>
-ValueType* any_cast(Any* any) noexcept {
-    return static_cast<ValueType*>(any->value_ptr);
+ValueType any_cast(Any& any) {
+    return *static_cast<std::remove_reference_t<ValueType>*>(any.value_ptr);
 }
 
 template<typename ValueType>
-const ValueType* any_cast(const Any* any) noexcept {
-    return any_cast<ValueType>(const_cast<Any*>(any));
+ValueType any_cast(const Any& any) {
+    return any_cast<ValueType>(const_cast<Any&>(any));
 }
+
+
+// todo: make rvalue
 
 

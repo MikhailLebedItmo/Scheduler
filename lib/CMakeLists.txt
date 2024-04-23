@@ -4,4 +4,6 @@ add_library(
         scheduler.cpp
         any.h
         task.h
+        future_result.h
+        task_id.h
 )
