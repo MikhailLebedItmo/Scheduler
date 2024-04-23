@@ -13,6 +13,7 @@ enable_testing()
 add_executable(
         my-lib-tests
         scheduler_ut.cpp
+        any_ut.cpp
 )
 
 target_link_libraries(
