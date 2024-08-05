@@ -4,67 +4,28 @@
 #include "../lib/any.h"
 #include "../lib/scheduler.h"
 #include <cmath>
-#include <any>
-#include <tuple>
-
-
-template <typename T>
-void f(T x, T y) {
-    std::cout << "first\n";
-}
-
-template <typename T, typename U>
-void f(T x, U y) {
-    std::cout << "second\n";
-}
-
-
-//template <typename ...Args>
-//struct Tuple {};
-//
-//template <typename Head, typename ...Args>
-//struct Tuple<Head, Args...> {
-//    Tuple(Head&& head, Args&&... args): head(std::forward<Head>(head)), tail(Tuple(std::forward<Args>(args)...)) {}
-//
-//    Head head;
-//    Tuple<Args...> tail;
-//};
-//
-//template <>
-//struct Tuple<> {
-//
-//};
-//
-//
-//
-//
-//template <typename Func, typename ...TupleArgs, typename ...FuncArgs>
-//auto apply(Func func, Tuple<TupleArgs...> t, FuncArgs... func_args) {
-//    return apply(func, t.tail, t.head, func_args...);
-//}
-//
-//template <typename Func, typename ...FuncArgs>
-//auto apply(Func func, Tuple<> t, FuncArgs... func_args) {
-//    return func(func_args...);
-//}
-
-
-struct Anyy {
-    template<typename T>
-    Anyy(T t) {}
-
-    template<typename U>
-    Anyy& operator=(const U& other) {}
-};
-
-
-
-
 
 int main() {
-    Any any = std::vector<int>(5, -1);
-    any = std::string("asdfsdf");
-    any = 5.0;
+    float a = 1;
+    float b = -2;
+    float c = 0;
 
+    Scheduler scheduler;
 
+    auto id1 = scheduler.add([](float a, float c){return -4 * a * c;}, a, c);
+
+    auto id2 = scheduler.add([](float b, float v){return b * b + v;}, b, scheduler.get_future_result<float>(id1));
+
+    auto id3 = scheduler.add([](float b, float d){return -b + std::sqrt(d);}, b, scheduler.get_future_result<float>(id2));
+
+    auto id4 = scheduler.add([](float b, float d){return -b - std::sqrt(d);}, b, scheduler.get_future_result<float>(id2));
+
+    auto id5 = scheduler.add([](float a, float v){return v/(2*a);}, a, scheduler.get_future_result<float>(id3));
+
+    auto id6 = scheduler.add([](float a, float v){return v/(2*a);},a, scheduler.get_future_result<float>(id4));
+
+    scheduler.execute_all();
+
+    std::cout << "x1 = " << scheduler.get_result<float>(id5) << std::endl;
+    std::cout << "x2 = " << scheduler.get_result<float>(id6) << std::endl;
 }

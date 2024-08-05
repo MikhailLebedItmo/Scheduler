@@ -107,6 +107,11 @@ TEST(Cast, Rvalue) {
     ASSERT_EQ(any_cast<std::string>(std::move(any)), x);
 }
 
+TEST(Cast, BadCast) {
+    Any any = std::string("asdf");
+    ASSERT_THROW(any_cast<int>(any), bad_any_cast);
+}
+
 
 
 
