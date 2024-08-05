@@ -1,9 +1,20 @@
 #pragma once
 #include <type_traits>
 #include <utility>
+#include <exception>
+#include <iostream>
+
+class bad_any_cast : public std::exception {
+public:
+    bad_any_cast() noexcept = default;
+
+    const char* what() const noexcept override {
+        return "bad_cast: failed conversion";
+    }
+};
 
 class Any {
-public: // structors
+public:
     Any() : man(nullptr), value_ptr() {}
 
     template<typename ValueType>
@@ -124,11 +135,17 @@ private:
 
 template<typename ValueType>
 ValueType any_cast(Any& any) {
+    if (&Any::value_manager<std::remove_reference_t<ValueType>> != any.man) {
+        throw bad_any_cast();
+    }
     return *static_cast<std::remove_reference_t<ValueType>*>(any.value_ptr);
 }
 
 template<typename ValueType>
 ValueType any_cast(Any&& any) {
+    if (&Any::value_manager<std::remove_reference_t<ValueType>> != any.man) {
+        throw bad_any_cast();
+    }
     return *static_cast<std::remove_reference_t<ValueType>*>(any.value_ptr);
 }
 
